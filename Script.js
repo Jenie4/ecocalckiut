@@ -12,7 +12,6 @@ form.addEventListener('submit', e => {
   const carne = parseInt(document.getElementById('carne').value) || 0;
   const luz = parseInt(document.getElementById('luz').value) || 0;
   const reciclaje = parseInt(document.getElementById('reciclaje').value);
-
   const puntaje = transporte + reciclaje + Math.floor(carne / 3) + Math.floor(luz / 4);
 
   let resultadoTexto = '';
@@ -20,6 +19,15 @@ form.addEventListener('submit', e => {
   let colorFondo = '';
   let barraColor = '';
   let ancho = 0;
+
+  const EMISIONES = {
+    electricidad: 0.5, // kg CO₂ por kWh
+    transporte: 0.21,  // kg CO₂ por km en carro
+    carne: 27,         // kg CO₂ por kg de carne
+    basura: 0.8,       // kg CO₂ por kg de residuos no reciclados
+  };
+
+  
 
   if (puntaje <= 6) {
     resultadoTexto = 'Huella baja 🌿';
@@ -45,6 +53,36 @@ form.addEventListener('submit', e => {
   consejo.textContent = consejoTexto;
   resultado.classList.remove('oculto');
   document.body.style.background = colorFondo;
+
+  function calcularHuella() {
+    const kwh = +document.getElementById("kwh").value || 0;
+    const km = +document.getElementById("km").value || 0;
+    const carne = +document.getElementById("carne").value || 0;
+    const basura = +document.getElementById("basura").value || 0;
+  
+    const anual = 
+      (kwh * 12 * EMISIONES.electricidad) +
+      (km * 52 * EMISIONES.transporte) +
+      (carne * 52 * EMISIONES.carne) +
+      (basura * 52 * EMISIONES.basura);
+  
+    document.getElementById("resultado").textContent = "Tu huella aproximada es de ${anual.toFixed(2)} kg de CO₂ al año.";
+  }
+
+  function calcularHuella() {
+    const kwh = +document.getElementById("kwh").value || 0;
+    const km = +document.getElementById("km").value || 0;
+    const carne = +document.getElementById("carne").value || 0;
+    const basura = +document.getElementById("basura").value || 0;
+  
+    const anual = 
+      (kwh * 12 * EMISIONES.electricidad) +
+      (km * 52 * EMISIONES.transporte) +
+      (carne * 52 * EMISIONES.carne) +
+      (basura * 52 * EMISIONES.basura);
+  
+    document.getElementById("resultado").textContent = "Tu huella aproximada es de ${anual.toFixed(2)} kg de CO₂ al año.";
+  }
 
   // animar barra
   let progreso = 0;
